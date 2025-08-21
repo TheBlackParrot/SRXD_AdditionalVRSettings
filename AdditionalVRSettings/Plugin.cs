@@ -32,10 +32,18 @@ public partial class Plugin : BaseUnityPlugin
     private static void UpdateControllerModelVisibility()
     {
         ActionBasedController[] controllers = FindObjectsByType<ActionBasedController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        
         foreach (ActionBasedController controller in controllers)
         {
-            controller.hideControllerModel = !EnableControllerModels.Value;
+            Transform wandModel = controller.model.Find("XRControllerWand/VRwand");
+            if (wandModel == null)
+            {
+                continue;
+            }
+
+            if (wandModel.TryGetComponent(out MeshRenderer wandMeshRenderer))
+            {
+                wandMeshRenderer.enabled = EnableControllerModels.Value;
+            }
         }
     }
 
@@ -45,8 +53,13 @@ public partial class Plugin : BaseUnityPlugin
         
         foreach (ActionBasedController controller in controllers)
         {
-            LineRenderer renderer = controller.modelParent.GetComponentInChildren<LineRenderer>();
-            if (renderer != null)
+            Transform stickRay = controller.model.Find("XRControllerWand/Armature/Bone/Stick Ray Prefab(Clone)");
+            if (stickRay == null)
+            {
+                continue;
+            }
+            
+            if (stickRay.TryGetComponent(out LineRenderer renderer))
             {
                 renderer.enabled = EnableLaserPointers.Value;
             }

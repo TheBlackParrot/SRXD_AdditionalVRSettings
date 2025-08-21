@@ -30,7 +30,7 @@
             <HintPath>$(BaseGameDir)\BepInEx\plugins\SpinCore.dll</HintPath>
         </Reference>
         <Reference Include="Unity.XR.Interaction.Toolkit">
-          <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.XR.Interaction.Toolkit.dll</HintPath>
+          <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\Unity.XR.Interaction.Toolkit.dll</HintPath>
         </Reference>
     </ItemGroup>
 
