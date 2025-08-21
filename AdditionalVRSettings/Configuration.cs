@@ -29,11 +29,11 @@ public partial class Plugin
         TranslationHelper.AddTranslation("AVRS_Smoothing", "Smoothing");
         
         CameraPositionSmoothing =
-            Config.Bind("Smoothing", nameof(CameraPositionSmoothing), 0.1f, "Spectator Camera position smoothing");
+            Config.Bind("Smoothing", nameof(CameraPositionSmoothing), 0.15f, "Spectator Camera position smoothing");
         TranslationHelper.AddTranslation("AVRS_CameraPositionSmoothing", "Spectator Camera position smoothing factor");
         
         CameraAngleSmoothing =
-            Config.Bind("Smoothing", nameof(CameraAngleSmoothing), 2f, "Spectator Camera angle smoothing");
+            Config.Bind("Smoothing", nameof(CameraAngleSmoothing), 20f, "Spectator Camera angle smoothing");
         TranslationHelper.AddTranslation("AVRS_CameraAngleSmoothing", "Spectator Camera angle smoothing factor");
     }
 
