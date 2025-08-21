@@ -1,4 +1,5 @@
-﻿using BepInEx.Configuration;
+﻿using System.Globalization;
+using BepInEx.Configuration;
 using SpinCore.Translation;
 using SpinCore.UI;
 using UnityEngine;
@@ -7,8 +8,11 @@ namespace AdditionalVRSettings;
 
 public partial class Plugin
 {
-    public static ConfigEntry<bool> EnableControllerModels;
-    public static ConfigEntry<bool> EnableLaserPointers;
+    public static ConfigEntry<bool> EnableControllerModels = null!;
+    public static ConfigEntry<bool> EnableLaserPointers = null!;
+    
+    public static ConfigEntry<float> CameraPositionSmoothing = null!;
+    public static ConfigEntry<float> CameraAngleSmoothing = null!;
 
     private void RegisterConfigEntries()
     {
@@ -21,6 +25,16 @@ public partial class Plugin
         EnableLaserPointers =
             Config.Bind("General", nameof(EnableLaserPointers), true, "Enables laser pointers");
         TranslationHelper.AddTranslation("AVRS_EnableLaserPointers", "Enable laser pointers");
+
+        TranslationHelper.AddTranslation("AVRS_Smoothing", "Smoothing");
+        
+        CameraPositionSmoothing =
+            Config.Bind("Smoothing", nameof(CameraPositionSmoothing), 0.1f, "Spectator Camera position smoothing");
+        TranslationHelper.AddTranslation("AVRS_CameraPositionSmoothing", "Spectator Camera position smoothing factor");
+        
+        CameraAngleSmoothing =
+            Config.Bind("Smoothing", nameof(CameraAngleSmoothing), 2f, "Spectator Camera angle smoothing");
+        TranslationHelper.AddTranslation("AVRS_CameraAngleSmoothing", "Spectator Camera angle smoothing factor");
     }
 
     private static void CreateModPage()
@@ -56,6 +70,44 @@ public partial class Plugin
                 EnableLaserPointers.Value = value;
                 UpdateLaserPointerVisibility();
             });
+        #endregion
+        
+        UIHelper.CreateSectionHeader(modGroup, "SmoothingHeader", "AVRS_Smoothing", false);
+        
+        #region CameraPositionSmoothing
+        CustomGroup cameraPositionSmoothingGroup = UIHelper.CreateGroup(modGroup, "CameraPositionSmoothingGroup");
+        cameraPositionSmoothingGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(cameraPositionSmoothingGroup, "CameraPositionSmoothingLabel", "AVRS_CameraPositionSmoothing");
+        CustomInputField cameraPositionSmoothingInput = UIHelper.CreateInputField(cameraPositionSmoothingGroup,
+            "CameraPositionSmoothingInput", (_, newValue) =>
+        {
+            if (!float.TryParse(newValue, out float value))
+            {
+                return;
+            }
+            
+            CameraPositionSmoothing.Value = value * 100; // a little bit more comprehensible imo
+            UpdateSpectatorCameraSmoothing();
+        });
+        cameraPositionSmoothingInput.InputField.SetText(CameraPositionSmoothing.Value.ToString(CultureInfo.InvariantCulture));
+        #endregion
+        
+        #region CameraAngleSmoothing
+        CustomGroup cameraAngleSmoothingGroup = UIHelper.CreateGroup(modGroup, "CameraAngleSmoothingGroup");
+        cameraAngleSmoothingGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(cameraAngleSmoothingGroup, "CameraAngleSmoothingLabel", "AVRS_CameraAngleSmoothing");
+        CustomInputField cameraAngleSmoothingInput = UIHelper.CreateInputField(cameraAngleSmoothingGroup,
+            "CameraAngleSmoothingInput", (_, newValue) =>
+        {
+            if (!float.TryParse(newValue, out float value))
+            {
+                return;
+            }
+            
+            CameraAngleSmoothing.Value = value * 100; // a little bit more comprehensible imo
+            UpdateSpectatorCameraSmoothing();
+        });
+        cameraAngleSmoothingInput.InputField.SetText(CameraAngleSmoothing.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
     }
 }

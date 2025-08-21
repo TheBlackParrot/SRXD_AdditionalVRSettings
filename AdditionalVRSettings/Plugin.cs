@@ -1,5 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using GameSystems.XR;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -11,7 +13,7 @@ namespace AdditionalVRSettings;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public partial class Plugin : BaseUnityPlugin
 {
-    private static ManualLogSource _logger;
+    private static ManualLogSource _logger = null!;
 
     private void Awake()
     {
@@ -27,11 +29,17 @@ public partial class Plugin : BaseUnityPlugin
     {
         UpdateControllerModelVisibility();
         UpdateLaserPointerVisibility();
+        UpdateSpectatorCameraSmoothing();
     }
 
     private static void UpdateControllerModelVisibility()
     {
         ActionBasedController[] controllers = FindObjectsByType<ActionBasedController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (controllers.Length == 0)
+        {
+            return;
+        }
+        
         foreach (ActionBasedController controller in controllers)
         {
             Transform wandModel = controller.model.Find("XRControllerWand/VRwand");
@@ -50,6 +58,10 @@ public partial class Plugin : BaseUnityPlugin
     private static void UpdateLaserPointerVisibility()
     {
         ActionBasedController[] controllers = FindObjectsByType<ActionBasedController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (controllers.Length == 0)
+        {
+            return;
+        }
         
         foreach (ActionBasedController controller in controllers)
         {
@@ -64,5 +76,23 @@ public partial class Plugin : BaseUnityPlugin
                 renderer.enabled = EnableLaserPointers.Value;
             }
         }
+    }
+
+    private static void UpdateSpectatorCameraSmoothing()
+    {
+        XROrigin xrOrigin = FindObjectOfType<XROrigin>();
+        if (xrOrigin == null)
+        {
+            return;
+        }
+
+        XRTransformStabilizer? stabilizer = xrOrigin.CameraFloorOffsetObject.transform.Find("Spectator Cam Stable").GetComponent<XRTransformStabilizer>();
+        if (stabilizer == null)
+        {
+            return;
+        }
+
+        stabilizer.positionStabilization = CameraPositionSmoothing.Value;
+        stabilizer.angleStabilization = CameraAngleSmoothing.Value;
     }
 }
