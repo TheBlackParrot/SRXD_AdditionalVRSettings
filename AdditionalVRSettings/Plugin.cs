@@ -35,10 +35,6 @@ public partial class Plugin : BaseUnityPlugin
     private static void UpdateControllerModelVisibility()
     {
         ActionBasedController[] controllers = FindObjectsByType<ActionBasedController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        if (controllers.Length == 0)
-        {
-            return;
-        }
         
         foreach (ActionBasedController controller in controllers)
         {
@@ -58,10 +54,6 @@ public partial class Plugin : BaseUnityPlugin
     private static void UpdateLaserPointerVisibility()
     {
         ActionBasedController[] controllers = FindObjectsByType<ActionBasedController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        if (controllers.Length == 0)
-        {
-            return;
-        }
         
         foreach (ActionBasedController controller in controllers)
         {
@@ -80,13 +72,9 @@ public partial class Plugin : BaseUnityPlugin
 
     private static void UpdateSpectatorCameraSmoothing()
     {
-        XROrigin xrOrigin = FindObjectOfType<XROrigin>();
-        if (xrOrigin == null)
-        {
-            return;
-        }
-
-        XRTransformStabilizer? stabilizer = xrOrigin.CameraFloorOffsetObject.transform.Find("Spectator Cam Stable").GetComponent<XRTransformStabilizer>();
+        XROrigin? xrOrigin = FindObjectOfType<XROrigin>();
+        XRTransformStabilizer? stabilizer = xrOrigin?.CameraFloorOffsetObject.transform.Find("Spectator Cam Stable")?.GetComponent<XRTransformStabilizer>();
+        
         if (stabilizer == null)
         {
             return;
