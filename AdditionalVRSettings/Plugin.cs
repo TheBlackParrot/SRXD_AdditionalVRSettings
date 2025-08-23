@@ -15,7 +15,7 @@ namespace AdditionalVRSettings;
 [BepInDependency("srxd.raoul1808.spincore", "1.1.2")]
 public partial class Plugin : BaseUnityPlugin
 {
-    private static ManualLogSource _logger = null!;
+    internal static ManualLogSource _logger = null!;
     private static Harmony _harmony = null!;
 
     private void Awake()
@@ -54,7 +54,7 @@ public partial class Plugin : BaseUnityPlugin
         
         foreach (ActionBasedController controller in controllers)
         {
-            Transform wandModel = controller.model.Find("XRControllerWand/VRwand");
+            Transform? wandModel = controller.model?.Find("XRControllerWand/VRwand");
             if (wandModel == null)
             {
                 continue;
@@ -73,7 +73,7 @@ public partial class Plugin : BaseUnityPlugin
         
         foreach (ActionBasedController controller in controllers)
         {
-            Transform stickRay = controller.model.Find("XRControllerWand/Armature/Bone/Stick Ray Prefab(Clone)");
+            Transform? stickRay = controller.model?.Find("XRControllerWand/Armature/Bone/Stick Ray Prefab(Clone)");
             if (stickRay == null)
             {
                 continue;
