@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project>
+<Project> 
     <Target Name="PostBuildScript" AfterTargets="AfterBuild">
         <Message Text="-> Copying $(TargetPath) to $(BaseGameDir)\BepInEx\plugins" Importance="high"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BaseGameDir)\BepInEx\plugins"

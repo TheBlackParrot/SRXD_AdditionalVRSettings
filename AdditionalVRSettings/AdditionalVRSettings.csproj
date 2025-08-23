@@ -27,6 +27,13 @@
         <DebugSymbols>false</DebugSymbols>
         <Optimize>true</Optimize>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm')">
+        <BaseGameDir>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm</BaseGameDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="Exists('D:\Steam\steamapps\common\Spin Rhythm')">
+        <BaseGameDir>D:\Steam\steamapps\common\Spin Rhythm</BaseGameDir>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
@@ -37,28 +44,22 @@
     
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Assembly-CSharp.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Assembly-CSharp.dll</HintPath>
+            <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="SpinCore">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\BepInEx\plugins\SpinCore.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\BepInEx\plugins\SpinCore.dll</HintPath>
+            <HintPath>$(BaseGameDir)\BepInEx\plugins\SpinCore.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="Unity.XR.CoreUtils">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.XR.CoreUtils.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.XR.CoreUtils.dll</HintPath>
+            <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\Unity.XR.CoreUtils.dll</HintPath>
         </Reference>
         <Reference Include="Unity.XR.Interaction.Toolkit">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.XR.Interaction.Toolkit.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\Unity.XR.Interaction.Toolkit.dll</HintPath>
+            <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\Unity.XR.Interaction.Toolkit.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\UnityEngine.UI.dll</HintPath>
-            <HintPath>D:\Steam\steamapps\common\Spin Rhythm\SpinRhythm_Data\Managed\UnityEngine.UI.dll</HintPath>
+            <HintPath>$(BaseGameDir)\SpinRhythm_Data\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
     </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using GameSystems.XR;
+using HarmonyLib;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -11,13 +12,18 @@ using UnityEngine.XR.Interaction.Toolkit;
 namespace AdditionalVRSettings;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInDependency("srxd.raoul1808.spincore", "1.1.2")]
 public partial class Plugin : BaseUnityPlugin
 {
     private static ManualLogSource _logger = null!;
+    private static Harmony _harmony = null!;
 
     private void Awake()
     {
         _logger = Logger;
+        _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+        
+        _harmony.PatchAll();
         
         RegisterConfigEntries();
         CreateModPage();
@@ -26,6 +32,16 @@ public partial class Plugin : BaseUnityPlugin
     }
 
     private void OnEnable()
+    {
+        UpdateStuff();
+    }
+
+    private void OnDestroy()
+    {
+        _harmony.UnpatchSelf();
+    }
+
+    internal static void UpdateStuff()
     {
         UpdateControllerModelVisibility();
         UpdateLaserPointerVisibility();
