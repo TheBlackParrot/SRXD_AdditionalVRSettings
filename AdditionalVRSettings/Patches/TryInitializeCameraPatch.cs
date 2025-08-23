@@ -11,9 +11,12 @@ internal class TryInitializeCameraPatch
     // ReSharper disable once InconsistentNaming
     private static void Patch(XROrigin __instance)
     {
-        if (__instance.m_CameraInitialized)
+        if (!__instance.m_CameraInitialized)
         {
-            Plugin.UpdateStuff();
+            return;
         }
+        
+        Plugin.Log.LogDebug("TryInitializeCamera");
+        Plugin.UpdateStuff();
     }
 }

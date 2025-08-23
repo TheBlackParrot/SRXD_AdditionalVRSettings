@@ -15,12 +15,12 @@ namespace AdditionalVRSettings;
 [BepInDependency("srxd.raoul1808.spincore", "1.1.2")]
 public partial class Plugin : BaseUnityPlugin
 {
-    internal static ManualLogSource _logger = null!;
+    internal static ManualLogSource Log = null!;
     private static Harmony _harmony = null!;
 
     private void Awake()
     {
-        _logger = Logger;
+        Log = Logger;
         _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         
         _harmony.PatchAll();
@@ -28,7 +28,7 @@ public partial class Plugin : BaseUnityPlugin
         RegisterConfigEntries();
         CreateModPage();
         
-        _logger.LogInfo("Plugin loaded");
+        Log.LogInfo("Plugin loaded");
     }
 
     private void OnEnable()
