@@ -11,6 +11,7 @@ public partial class Plugin
     public static ConfigEntry<bool> EnableControllerModels = null!;
     public static ConfigEntry<bool> EnableLaserPointers = null!;
     public static ConfigEntry<bool> EnableWorldParticles = null!;
+    public static ConfigEntry<bool> EnableBasePlatform = null!;
     
     public static ConfigEntry<float> CameraPositionSmoothing = null!;
     public static ConfigEntry<float> CameraAngleSmoothing = null!;
@@ -30,6 +31,10 @@ public partial class Plugin
         EnableWorldParticles =
             Config.Bind("General", nameof(EnableWorldParticles), true, "Enables world particles");
         TranslationHelper.AddTranslation("AVRS_EnableWorldParticles", "Enable world particles");
+        
+        EnableBasePlatform =
+            Config.Bind("General", nameof(EnableBasePlatform), true, "Enables platform underneath you");
+        TranslationHelper.AddTranslation("AVRS_EnableBasePlatform", "Enable base platform");
 
         TranslationHelper.AddTranslation("AVRS_Smoothing", "Smoothing");
         
@@ -85,6 +90,17 @@ public partial class Plugin
             {
                 EnableWorldParticles.Value = value;
                 UpdateWorldParticlesVisibility();
+            });
+        #endregion
+        
+        #region EnableBasePlatform
+        CustomGroup enableBasePlatformGroup = UIHelper.CreateGroup(modGroup, "EnableBasePlatformGroup");
+        enableBasePlatformGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateSmallToggle(enableBasePlatformGroup, nameof(EnableBasePlatform),
+            "AVRS_EnableBasePlatform", EnableBasePlatform.Value, value =>
+            {
+                EnableBasePlatform.Value = value;
+                UpdateBasePlatformVisibility();
             });
         #endregion
         

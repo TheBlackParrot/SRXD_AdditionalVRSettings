@@ -46,6 +46,7 @@ public partial class Plugin : BaseUnityPlugin
         UpdateControllerModelVisibility();
         UpdateLaserPointerVisibility();
         UpdateWorldParticlesVisibility();
+        UpdateBasePlatformVisibility();
         UpdateSpectatorCameraSmoothing();
     }
 
@@ -87,16 +88,14 @@ public partial class Plugin : BaseUnityPlugin
         }
     }
 
-    private static void UpdateWorldParticlesVisibility()
-    {
-        GameObject? particlesObject = GameObject.Find("Menu Particles Object");
-        if (particlesObject == null)
-        {
-            return;
-        }
-        
-        particlesObject.SetActive(EnableWorldParticles.Value);
-    }
+    private static void UpdateWorldParticlesVisibility() =>
+        FindAnyObjectByType<XROrigin>()?.Origin.transform
+            .Find("BackgroundObjectBaseVRMenu/Menu Platform ObjectsVR/PlatformNEW/Menu Particles Object")?.gameObject
+            .SetActive(EnableWorldParticles.Value);
+    private static void UpdateBasePlatformVisibility() =>
+        FindAnyObjectByType<XROrigin>()?.Origin.transform
+            .Find("BackgroundObjectBaseVRMenu/Menu Platform ObjectsVR/PlatformNEW/DigitalPlatformBase")?.gameObject
+            .SetActive(EnableBasePlatform.Value);
 
     private static void UpdateSpectatorCameraSmoothing()
     {
