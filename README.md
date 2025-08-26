@@ -7,6 +7,7 @@ All settings are in the added Mod Settings page.
 - **EnableControllerModels** -- Toggles visibility of the in-game controller models
 - **EnableLaserPointers** -- Toggles visibility of the laser/line drawn from the controller model to the point the input is being casted to
 - **EnableWorldParticles** -- Toggles visibility of the world "dust" particles
+- **EnableBasePlatform** -- Toggles visibility of the platform underneath you
 - **CameraPositionSmoothing** -- Amount of smoothing to apply to the Spectator Camera's position
 - **CameraAngleSmoothing** -- Amount of smoothing to apply to the Spectator Camera's angle
 
