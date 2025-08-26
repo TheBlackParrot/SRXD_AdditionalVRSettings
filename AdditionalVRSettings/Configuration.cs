@@ -10,6 +10,7 @@ public partial class Plugin
 {
     public static ConfigEntry<bool> EnableControllerModels = null!;
     public static ConfigEntry<bool> EnableLaserPointers = null!;
+    public static ConfigEntry<bool> EnableWorldParticles = null!;
     
     public static ConfigEntry<float> CameraPositionSmoothing = null!;
     public static ConfigEntry<float> CameraAngleSmoothing = null!;
@@ -25,6 +26,10 @@ public partial class Plugin
         EnableLaserPointers =
             Config.Bind("General", nameof(EnableLaserPointers), true, "Enables laser pointers");
         TranslationHelper.AddTranslation("AVRS_EnableLaserPointers", "Enable laser pointers");
+        
+        EnableWorldParticles =
+            Config.Bind("General", nameof(EnableWorldParticles), true, "Enables world particles");
+        TranslationHelper.AddTranslation("AVRS_EnableWorldParticles", "Enable world particles");
 
         TranslationHelper.AddTranslation("AVRS_Smoothing", "Smoothing");
         
@@ -69,6 +74,17 @@ public partial class Plugin
             {
                 EnableLaserPointers.Value = value;
                 UpdateLaserPointerVisibility();
+            });
+        #endregion
+        
+        #region EnableWorldParticles
+        CustomGroup enableWorldParticlesGroup = UIHelper.CreateGroup(modGroup, "EnableWorldParticlesGroup");
+        enableWorldParticlesGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateSmallToggle(enableWorldParticlesGroup, nameof(EnableWorldParticles),
+            "AVRS_EnableWorldParticles", EnableWorldParticles.Value, value =>
+            {
+                EnableWorldParticles.Value = value;
+                UpdateWorldParticlesVisibility();
             });
         #endregion
         

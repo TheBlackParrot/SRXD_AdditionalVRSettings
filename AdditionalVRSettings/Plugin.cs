@@ -45,6 +45,7 @@ public partial class Plugin : BaseUnityPlugin
     {
         UpdateControllerModelVisibility();
         UpdateLaserPointerVisibility();
+        UpdateWorldParticlesVisibility();
         UpdateSpectatorCameraSmoothing();
     }
 
@@ -84,6 +85,17 @@ public partial class Plugin : BaseUnityPlugin
                 renderer.enabled = EnableLaserPointers.Value;
             }
         }
+    }
+
+    private static void UpdateWorldParticlesVisibility()
+    {
+        GameObject? particlesObject = GameObject.Find("Menu Particles Object");
+        if (particlesObject == null)
+        {
+            return;
+        }
+        
+        particlesObject.SetActive(EnableWorldParticles.Value);
     }
 
     private static void UpdateSpectatorCameraSmoothing()
