@@ -33,11 +33,18 @@ public partial class Plugin : BaseUnityPlugin
 
     private void OnEnable()
     {
+        Track.OnStartedPlayingTrack += TrackOnStartedPlayingTrack;
         UpdateStuff();
+    }
+
+    private static void TrackOnStartedPlayingTrack(PlayableTrackDataHandle arg1, PlayState[] arg2)
+    {
+        UpdateLaserPointerVisibility();
     }
 
     private void OnDestroy()
     {
+        Track.OnStartedPlayingTrack -= TrackOnStartedPlayingTrack;
         _harmony.UnpatchSelf();
     }
 
