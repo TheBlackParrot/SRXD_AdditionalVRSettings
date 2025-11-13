@@ -1,4 +1,5 @@
-﻿using GameSystems.XR;
+﻿using System.Diagnostics.CodeAnalysis;
+using GameSystems.XR;
 using HarmonyLib;
 using UnityEngine;
 
@@ -9,20 +10,18 @@ internal class GetCollisionRayPatch
 {
     [HarmonyPatch(typeof(XRHand), nameof(XRHand.GetCollisionRay))]
     [HarmonyPostfix]
-    // ReSharper disable once InconsistentNaming
-    internal static void Patch(Transform rigTransform, ref Ray __result)
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    internal static void Patch(XRHand __instance, Transform rigTransform, ref Ray __result)
     {
         // the 100 is arbitrary
-        Vector3 offset = rigTransform.TransformDirection(
-            (Plugin.HandXAngleOffset.Value) / 100,
-            (Plugin.HandYAngleOffset.Value) / 100,
-            (Plugin.HandZAngleOffset.Value) / 100);
-        
-        __result.direction = __result.direction with
+        Vector3 angle = __instance.transform.name switch
         {
-            x = __result.direction.x + offset.x,
-            y = __result.direction.y + offset.y,
-            z = __result.direction.z + offset.z
+            "LeftHand" => new Vector3(Plugin.LeftHandXAngleOffset.Value, Plugin.LeftHandYAngleOffset.Value, Plugin.LeftHandZAngleOffset.Value) / 100f,
+            "RightHand" => new Vector3(Plugin.RightHandXAngleOffset.Value, Plugin.RightHandYAngleOffset.Value, Plugin.RightHandZAngleOffset.Value) / 100f,
+            _ => Vector3.zero
         };
+        
+        Vector3 offset = rigTransform.TransformDirection(angle);
+        __result.direction += offset;
     }
 }

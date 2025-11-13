@@ -16,9 +16,12 @@ public partial class Plugin
     public static ConfigEntry<float> CameraPositionSmoothing = null!;
     public static ConfigEntry<float> CameraAngleSmoothing = null!;
 
-    public static ConfigEntry<float> HandXAngleOffset = null!;
-    public static ConfigEntry<float> HandYAngleOffset = null!;
-    public static ConfigEntry<float> HandZAngleOffset = null!;
+    public static ConfigEntry<float> LeftHandXAngleOffset = null!;
+    public static ConfigEntry<float> LeftHandYAngleOffset = null!;
+    public static ConfigEntry<float> LeftHandZAngleOffset = null!;
+    public static ConfigEntry<float> RightHandXAngleOffset = null!;
+    public static ConfigEntry<float> RightHandYAngleOffset = null!;
+    public static ConfigEntry<float> RightHandZAngleOffset = null!;
 
     private void RegisterConfigEntries()
     {
@@ -50,15 +53,22 @@ public partial class Plugin
             Config.Bind("Smoothing", nameof(CameraAngleSmoothing), 20f, "Spectator Camera angle smoothing");
         TranslationHelper.AddTranslation("AVRS_CameraAngleSmoothing", "Spectator Camera angle smoothing factor");
         
-        TranslationHelper.AddTranslation("AVRS_ControllerOffsets", "Controller Offsets");
+        TranslationHelper.AddTranslation("AVRS_ControllerOffsets", "Controller Angle Offsets");
         
-        HandXAngleOffset =
-            Config.Bind("ControllerOffsets", nameof(HandXAngleOffset), 0f, "X angle offset for controllers");
-        HandYAngleOffset =
-            Config.Bind("ControllerOffsets", nameof(HandYAngleOffset), 0f, "Y angle offset for controllers");
-        HandZAngleOffset =
-            Config.Bind("ControllerOffsets", nameof(HandZAngleOffset), 0f, "Z angle offset for controllers");
-        TranslationHelper.AddTranslation("AVRS_HandAngleOffset", "Angle offset for controllers");
+        LeftHandXAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(LeftHandXAngleOffset), 0f, "X angle offset for the left controller");
+        LeftHandYAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(LeftHandYAngleOffset), 0f, "Y angle offset for the left controller");
+        LeftHandZAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(LeftHandZAngleOffset), 0f, "Z angle offset for the left controller");
+        RightHandXAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(RightHandXAngleOffset), 0f, "X angle offset for the right controller");
+        RightHandYAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(RightHandYAngleOffset), 0f, "Y angle offset for the right controller");
+        RightHandZAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(RightHandZAngleOffset), 0f, "Z angle offset for the right controller");
+        TranslationHelper.AddTranslation("AVRS_LeftHandAngleOffset", "Left controller (X, Y, Z)");
+        TranslationHelper.AddTranslation("AVRS_RightHandAngleOffset", "Right controller (X, Y, Z)");
     }
 
     private static void CreateModPage()
@@ -158,43 +168,82 @@ public partial class Plugin
         
         UIHelper.CreateSectionHeader(modGroup, "AngleOffsetHeader", "AVRS_ControllerOffsets", false);
         
-        #region HandAngleOffset
-        CustomGroup handAngleOffsetGroup = UIHelper.CreateGroup(modGroup, "HandAngleOffsetGroup");
-        handAngleOffsetGroup.LayoutDirection = Axis.Horizontal;
-        UIHelper.CreateLabel(handAngleOffsetGroup, "HandAngleOffsetLabel", "AVRS_HandAngleOffset");
-        CustomInputField handXAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
-            "HandXAngleOffsetInput", (_, newValue) =>
+        #region LeftHandAngleOffset
+        CustomGroup leftHandAngleOffsetGroup = UIHelper.CreateGroup(modGroup, "LeftHandAngleOffsetGroup");
+        leftHandAngleOffsetGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(leftHandAngleOffsetGroup, "LeftHandAngleOffsetLabel", "AVRS_LeftHandAngleOffset");
+        CustomInputField leftHandXAngleOffsetInput = UIHelper.CreateInputField(leftHandAngleOffsetGroup,
+            "LeftHandXAngleOffsetInput", (_, newValue) =>
             {
                 if (!float.TryParse(newValue, out float value))
                 {
                     return;
                 }
 
-                HandXAngleOffset.Value = value;
+                LeftHandXAngleOffset.Value = value;
             });
-        CustomInputField handYAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
-            "HandYAngleOffsetInput", (_, newValue) =>
+        CustomInputField leftHandYAngleOffsetInput = UIHelper.CreateInputField(leftHandAngleOffsetGroup,
+            "LeftHandYAngleOffsetInput", (_, newValue) =>
             {
                 if (!float.TryParse(newValue, out float value))
                 {
                     return;
                 }
 
-                HandYAngleOffset.Value = value;
+                LeftHandYAngleOffset.Value = value;
             });
-        CustomInputField handZAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
-            "HandZAngleOffsetInput", (_, newValue) =>
+        CustomInputField leftHandZAngleOffsetInput = UIHelper.CreateInputField(leftHandAngleOffsetGroup,
+            "LeftHandZAngleOffsetInput", (_, newValue) =>
             {
                 if (!float.TryParse(newValue, out float value))
                 {
                     return;
                 }
 
-                HandZAngleOffset.Value = value;
+                LeftHandZAngleOffset.Value = value;
             });
-        handXAngleOffsetInput.InputField.SetText(HandXAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
-        handYAngleOffsetInput.InputField.SetText(HandYAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
-        handZAngleOffsetInput.InputField.SetText(HandZAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        leftHandXAngleOffsetInput.InputField.SetText(LeftHandXAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        leftHandYAngleOffsetInput.InputField.SetText(LeftHandYAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        leftHandZAngleOffsetInput.InputField.SetText(LeftHandZAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        #endregion
+        
+        #region RightHandAngleOffset
+        CustomGroup rightHandAngleOffsetGroup = UIHelper.CreateGroup(modGroup, "RightHandAngleOffsetGroup");
+        rightHandAngleOffsetGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(rightHandAngleOffsetGroup, "RightHandAngleOffsetLabel", "AVRS_RightHandAngleOffset");
+        CustomInputField rightHandXAngleOffsetInput = UIHelper.CreateInputField(rightHandAngleOffsetGroup,
+            "RightHandXAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                RightHandXAngleOffset.Value = value;
+            });
+        CustomInputField rightHandYAngleOffsetInput = UIHelper.CreateInputField(rightHandAngleOffsetGroup,
+            "RightHandYAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                RightHandYAngleOffset.Value = value;
+            });
+        CustomInputField rightHandZAngleOffsetInput = UIHelper.CreateInputField(rightHandAngleOffsetGroup,
+            "RightHandZAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                RightHandZAngleOffset.Value = value;
+            });
+        rightHandXAngleOffsetInput.InputField.SetText(RightHandXAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        rightHandYAngleOffsetInput.InputField.SetText(RightHandYAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        rightHandZAngleOffsetInput.InputField.SetText(RightHandZAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
     }
 }
