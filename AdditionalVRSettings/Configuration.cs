@@ -16,6 +16,10 @@ public partial class Plugin
     public static ConfigEntry<float> CameraPositionSmoothing = null!;
     public static ConfigEntry<float> CameraAngleSmoothing = null!;
 
+    public static ConfigEntry<float> HandXAngleOffset = null!;
+    public static ConfigEntry<float> HandYAngleOffset = null!;
+    public static ConfigEntry<float> HandZAngleOffset = null!;
+
     private void RegisterConfigEntries()
     {
         TranslationHelper.AddTranslation("AVRS_Name", nameof(AdditionalVRSettings));
@@ -45,6 +49,16 @@ public partial class Plugin
         CameraAngleSmoothing =
             Config.Bind("Smoothing", nameof(CameraAngleSmoothing), 20f, "Spectator Camera angle smoothing");
         TranslationHelper.AddTranslation("AVRS_CameraAngleSmoothing", "Spectator Camera angle smoothing factor");
+        
+        TranslationHelper.AddTranslation("AVRS_ControllerOffsets", "Controller Offsets");
+        
+        HandXAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(HandXAngleOffset), 0f, "X angle offset for controllers");
+        HandYAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(HandYAngleOffset), 0f, "Y angle offset for controllers");
+        HandZAngleOffset =
+            Config.Bind("ControllerOffsets", nameof(HandZAngleOffset), 0f, "Z angle offset for controllers");
+        TranslationHelper.AddTranslation("AVRS_HandAngleOffset", "Angle offset for controllers");
     }
 
     private static void CreateModPage()
@@ -140,6 +154,47 @@ public partial class Plugin
             UpdateSpectatorCameraSmoothing();
         });
         cameraAngleSmoothingInput.InputField.SetText(CameraAngleSmoothing.Value.ToString(CultureInfo.InvariantCulture));
+        #endregion
+        
+        UIHelper.CreateSectionHeader(modGroup, "AngleOffsetHeader", "AVRS_ControllerOffsets", false);
+        
+        #region HandAngleOffset
+        CustomGroup handAngleOffsetGroup = UIHelper.CreateGroup(modGroup, "HandAngleOffsetGroup");
+        handAngleOffsetGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(handAngleOffsetGroup, "HandAngleOffsetLabel", "AVRS_HandAngleOffset");
+        CustomInputField handXAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
+            "HandXAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                HandXAngleOffset.Value = value;
+            });
+        CustomInputField handYAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
+            "HandYAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                HandYAngleOffset.Value = value;
+            });
+        CustomInputField handZAngleOffsetInput = UIHelper.CreateInputField(handAngleOffsetGroup,
+            "HandZAngleOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                HandZAngleOffset.Value = value;
+            });
+        handXAngleOffsetInput.InputField.SetText(HandXAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        handYAngleOffsetInput.InputField.SetText(HandYAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
+        handZAngleOffsetInput.InputField.SetText(HandZAngleOffset.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
     }
 }
