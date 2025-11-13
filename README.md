@@ -10,6 +10,7 @@ All settings are in the added Mod Settings page.
 - **EnableBasePlatform** -- Toggles visibility of the platform underneath you
 - **CameraPositionSmoothing** -- Amount of smoothing to apply to the Spectator Camera's position
 - **CameraAngleSmoothing** -- Amount of smoothing to apply to the Spectator Camera's angle
+- **[Left/Right]Hand[X/Y/Z]AngleOffset** -- Offsets the wand collision ray/input laser
 
 ## Dependencies
 - SpinCore
