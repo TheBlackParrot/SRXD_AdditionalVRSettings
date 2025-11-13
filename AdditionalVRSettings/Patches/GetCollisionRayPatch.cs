@@ -10,14 +10,19 @@ internal class GetCollisionRayPatch
     [HarmonyPatch(typeof(XRHand), nameof(XRHand.GetCollisionRay))]
     [HarmonyPostfix]
     // ReSharper disable once InconsistentNaming
-    internal static void Patch(ref Ray __result)
+    internal static void Patch(Transform rigTransform, ref Ray __result)
     {
         // the 100 is arbitrary
+        Vector3 offset = rigTransform.TransformDirection(
+            (Plugin.HandXAngleOffset.Value) / 100,
+            (Plugin.HandYAngleOffset.Value) / 100,
+            (Plugin.HandZAngleOffset.Value) / 100);
+        
         __result.direction = __result.direction with
         {
-            x = __result.direction.x + (Plugin.HandXAngleOffset.Value)/100,
-            y = __result.direction.y + (Plugin.HandYAngleOffset.Value)/100,
-            z = __result.direction.z + (Plugin.HandZAngleOffset.Value)/100
+            x = __result.direction.x + offset.x,
+            y = __result.direction.y + offset.y,
+            z = __result.direction.z + offset.z
         };
     }
 }
