@@ -22,6 +22,10 @@ public partial class Plugin
     public static ConfigEntry<float> RightHandXAngleOffset = null!;
     public static ConfigEntry<float> RightHandYAngleOffset = null!;
     public static ConfigEntry<float> RightHandZAngleOffset = null!;
+    
+    public static ConfigEntry<float> CameraOffsetX = null!;
+    public static ConfigEntry<float> CameraOffsetY = null!;
+    public static ConfigEntry<float> CameraOffsetZ = null!;
 
     private void RegisterConfigEntries()
     {
@@ -43,7 +47,7 @@ public partial class Plugin
             Config.Bind("General", nameof(EnableBasePlatform), true, "Enables platform underneath you");
         TranslationHelper.AddTranslation("AVRS_EnableBasePlatform", "Enable base platform");
 
-        TranslationHelper.AddTranslation("AVRS_Smoothing", "Smoothing");
+        TranslationHelper.AddTranslation("AVRS_SpectatorCamera", "Spectator Camera");
         
         CameraPositionSmoothing =
             Config.Bind("Smoothing", nameof(CameraPositionSmoothing), 0.15f, "Spectator Camera position smoothing");
@@ -69,6 +73,14 @@ public partial class Plugin
             Config.Bind("ControllerOffsets", nameof(RightHandZAngleOffset), 0f, "Z angle offset for the right controller");
         TranslationHelper.AddTranslation("AVRS_LeftHandAngleOffset", "Left controller (X, Y, Z)");
         TranslationHelper.AddTranslation("AVRS_RightHandAngleOffset", "Right controller (X, Y, Z)");
+        
+        CameraOffsetX =
+            Config.Bind("CameraOffsets", nameof(CameraOffsetX), 0f, "X position offset for the Spectator Camera");
+        CameraOffsetY =
+            Config.Bind("CameraOffsets", nameof(CameraOffsetY), 0f, "Y position offset for the Spectator Camera");
+        CameraOffsetZ =
+            Config.Bind("CameraOffsets", nameof(CameraOffsetZ), 0f, "Z position offset for the Spectator Camera");
+        TranslationHelper.AddTranslation("AVRS_CameraOffset", "Spectator Camera offset (X, Y, Z)");
     }
 
     private static void CreateModPage()
@@ -128,7 +140,7 @@ public partial class Plugin
             });
         #endregion
         
-        UIHelper.CreateSectionHeader(modGroup, "SmoothingHeader", "AVRS_Smoothing", false);
+        UIHelper.CreateSectionHeader(modGroup, "SpectatorCameraHeader", "AVRS_SpectatorCamera", false);
         
         #region CameraPositionSmoothing
         CustomGroup cameraPositionSmoothingGroup = UIHelper.CreateGroup(modGroup, "CameraPositionSmoothingGroup");
@@ -164,6 +176,45 @@ public partial class Plugin
             UpdateSpectatorCameraSmoothing();
         });
         cameraAngleSmoothingInput.InputField.SetText(CameraAngleSmoothing.Value.ToString(CultureInfo.InvariantCulture));
+        #endregion
+        
+        #region CameraPositionOffset
+        CustomGroup cameraPositionOffsetGroup = UIHelper.CreateGroup(modGroup, "CameraPositionOffsetGroup");
+        cameraPositionOffsetGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(cameraPositionOffsetGroup, "CameraPositionOffsetLabel", "AVRS_CameraOffset");
+        CustomInputField cameraPositionXOffsetInput = UIHelper.CreateInputField(cameraPositionOffsetGroup,
+            "CameraPositionXOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                CameraOffsetX.Value = value;
+            });
+        CustomInputField cameraPositionYOffsetInput = UIHelper.CreateInputField(cameraPositionOffsetGroup,
+            "CameraPositionYOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                CameraOffsetY.Value = value;
+            });
+        CustomInputField cameraPositionZOffsetInput = UIHelper.CreateInputField(cameraPositionOffsetGroup,
+            "CameraPositionZOffsetInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+
+                CameraOffsetZ.Value = value;
+            });
+        cameraPositionXOffsetInput.InputField.SetText(CameraOffsetX.Value.ToString(CultureInfo.InvariantCulture));
+        cameraPositionYOffsetInput.InputField.SetText(CameraOffsetY.Value.ToString(CultureInfo.InvariantCulture));
+        cameraPositionZOffsetInput.InputField.SetText(CameraOffsetZ.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
         
         UIHelper.CreateSectionHeader(modGroup, "AngleOffsetHeader", "AVRS_ControllerOffsets", false);
