@@ -26,6 +26,9 @@ public partial class Plugin
     public static ConfigEntry<float> CameraOffsetX = null!;
     public static ConfigEntry<float> CameraOffsetY = null!;
     public static ConfigEntry<float> CameraOffsetZ = null!;
+    
+    public static ConfigEntry<bool> LockXRotationOnCamera = null!;
+    public static ConfigEntry<float> CameraXRotation = null!;
 
     private void RegisterConfigEntries()
     {
@@ -81,6 +84,13 @@ public partial class Plugin
         CameraOffsetZ =
             Config.Bind("CameraOffsets", nameof(CameraOffsetZ), 0f, "Z position offset for the Spectator Camera");
         TranslationHelper.AddTranslation("AVRS_CameraOffset", "Spectator Camera offset (X, Y, Z)");
+        
+        LockXRotationOnCamera =
+            Config.Bind("CameraOffsets", nameof(LockXRotationOnCamera), false, "Lock X rotation (or pitch, or up/down) on the Spectator Camera");
+        TranslationHelper.AddTranslation("AVRS_LockXRotationOnCamera", "Lock Spectator Camera pitch/X rotation");
+        CameraXRotation =
+            Config.Bind("CameraOffsets", nameof(CameraXRotation), 0f, "X rotation (or pitch, or up/down) for the Spectator Camera");
+        TranslationHelper.AddTranslation("AVRS_CameraXRotation", "Spectator Camera pitch/X rotation offset");
     }
 
     private static void CreateModPage()
@@ -215,6 +225,33 @@ public partial class Plugin
         cameraPositionXOffsetInput.InputField.SetText(CameraOffsetX.Value.ToString(CultureInfo.InvariantCulture));
         cameraPositionYOffsetInput.InputField.SetText(CameraOffsetY.Value.ToString(CultureInfo.InvariantCulture));
         cameraPositionZOffsetInput.InputField.SetText(CameraOffsetZ.Value.ToString(CultureInfo.InvariantCulture));
+        #endregion
+        
+        #region LockXRotationOnCamera
+        CustomGroup lockXRotationOnCameraGroup = UIHelper.CreateGroup(modGroup, "LockXRotationOnCameraGroup");
+        lockXRotationOnCameraGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateSmallToggle(lockXRotationOnCameraGroup, nameof(LockXRotationOnCamera),
+            "AVRS_LockXRotationOnCamera", LockXRotationOnCamera.Value, value =>
+            {
+                LockXRotationOnCamera.Value = value;
+            });
+        #endregion
+        
+        #region CameraXRotation
+        CustomGroup cameraXRotationGroup = UIHelper.CreateGroup(modGroup, "CameraXRotationGroup");
+        cameraXRotationGroup.LayoutDirection = Axis.Horizontal;
+        UIHelper.CreateLabel(cameraXRotationGroup, "CameraXRotationLabel", "AVRS_CameraXRotation");
+        CustomInputField cameraXRotationInput = UIHelper.CreateInputField(cameraXRotationGroup,
+            "CameraXRotationInput", (_, newValue) =>
+            {
+                if (!float.TryParse(newValue, out float value))
+                {
+                    return;
+                }
+            
+                CameraXRotation.Value = value;
+            });
+        cameraXRotationInput.InputField.SetText(CameraXRotation.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
         
         UIHelper.CreateSectionHeader(modGroup, "AngleOffsetHeader", "AVRS_ControllerOffsets", false);
