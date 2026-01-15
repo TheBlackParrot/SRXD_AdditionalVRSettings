@@ -114,7 +114,7 @@ public partial class Plugin : BaseUnityPlugin
             return;
         }
 
-        stabilizer.positionStabilization = CameraPositionSmoothing.Value;
-        stabilizer.angleStabilization = CameraAngleSmoothing.Value;
+        stabilizer.positionStabilization = CameraPositionSmoothing.Value * 100;
+        stabilizer.angleStabilization = CameraAngleSmoothing.Value * 100;
     }
 }

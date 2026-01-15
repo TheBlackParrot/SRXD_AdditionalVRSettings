@@ -154,7 +154,7 @@ public partial class Plugin
                 return;
             }
             
-            CameraPositionSmoothing.Value = value * 100; // a little bit more comprehensible imo
+            CameraPositionSmoothing.Value = value;
             UpdateSpectatorCameraSmoothing();
         });
         cameraPositionSmoothingInput.InputField.SetText(CameraPositionSmoothing.Value.ToString(CultureInfo.InvariantCulture));
@@ -172,7 +172,7 @@ public partial class Plugin
                 return;
             }
             
-            CameraAngleSmoothing.Value = value * 100; // a little bit more comprehensible imo
+            CameraAngleSmoothing.Value = value;
             UpdateSpectatorCameraSmoothing();
         });
         cameraAngleSmoothingInput.InputField.SetText(CameraAngleSmoothing.Value.ToString(CultureInfo.InvariantCulture));
