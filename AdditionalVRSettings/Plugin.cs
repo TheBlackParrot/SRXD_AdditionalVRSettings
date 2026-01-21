@@ -54,7 +54,7 @@ public partial class Plugin : BaseUnityPlugin
         UpdateLaserPointerVisibility();
         UpdateWorldParticlesVisibility();
         UpdateBasePlatformVisibility();
-        UpdateSpectatorCameraSmoothing();
+        UpdateSpectatorCameraSettings();
     }
 
     private static void UpdateControllerModelVisibility()
@@ -104,7 +104,7 @@ public partial class Plugin : BaseUnityPlugin
             .Find("BackgroundObjectBaseVRMenu/Menu Platform ObjectsVR/PlatformNEW/DigitalPlatformBase")?.gameObject
             .SetActive(EnableBasePlatform.Value);
 
-    private static void UpdateSpectatorCameraSmoothing()
+    private static void UpdateSpectatorCameraSettings()
     {
         XROrigin? xrOrigin = FindObjectOfType<XROrigin>();
         XRTransformStabilizer? stabilizer = xrOrigin?.CameraFloorOffsetObject.transform.Find("Spectator Cam Stable")?.GetComponent<XRTransformStabilizer>();
@@ -116,5 +116,14 @@ public partial class Plugin : BaseUnityPlugin
 
         stabilizer.positionStabilization = CameraPositionSmoothing.Value * 100;
         stabilizer.angleStabilization = CameraAngleSmoothing.Value * 100;
+
+        XRPlayerRig? rig = XRPlayerRig.Instance;
+        if (rig != null)
+        {
+            rig.spectatorCamera.transform.localPosition = new Vector3(CameraOffsetX.Value, CameraOffsetY.Value, CameraOffsetZ.Value);
+            
+            Vector3 offset = new(CameraXRotation.Value, 0, 0);
+            rig.spectatorCamera.transform.localEulerAngles = offset;
+        }
     }
 }

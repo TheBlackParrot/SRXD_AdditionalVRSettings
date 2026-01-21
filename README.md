@@ -11,6 +11,9 @@ All settings are in the added Mod Settings page.
 - **CameraPositionSmoothing** -- Amount of smoothing to apply to the Spectator Camera's position
 - **CameraAngleSmoothing** -- Amount of smoothing to apply to the Spectator Camera's angle
 - **[Left/Right]Hand[X/Y/Z]AngleOffset** -- Offsets the wand collision ray/input laser
+- **CameraOffset[X/Y/Z]** -- Offsets the position of the Spectator Camera
+- LockXRotationOnCamera -- Locks the pitch/X rotation value on the Spectator Camera, preventing vertical bobbing
+- CameraXRotation -- Offsets the pitch/X rotation of the Spectator Camera up or down
 
 ## Dependencies
 - SpinCore

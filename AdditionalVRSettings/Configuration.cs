@@ -165,7 +165,7 @@ public partial class Plugin
             }
             
             CameraPositionSmoothing.Value = value;
-            UpdateSpectatorCameraSmoothing();
+            UpdateSpectatorCameraSettings();
         });
         cameraPositionSmoothingInput.InputField.SetText(CameraPositionSmoothing.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
@@ -183,7 +183,7 @@ public partial class Plugin
             }
             
             CameraAngleSmoothing.Value = value;
-            UpdateSpectatorCameraSmoothing();
+            UpdateSpectatorCameraSettings();
         });
         cameraAngleSmoothingInput.InputField.SetText(CameraAngleSmoothing.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
@@ -201,6 +201,7 @@ public partial class Plugin
                 }
 
                 CameraOffsetX.Value = value;
+                UpdateSpectatorCameraSettings();
             });
         CustomInputField cameraPositionYOffsetInput = UIHelper.CreateInputField(cameraPositionOffsetGroup,
             "CameraPositionYOffsetInput", (_, newValue) =>
@@ -211,6 +212,7 @@ public partial class Plugin
                 }
 
                 CameraOffsetY.Value = value;
+                UpdateSpectatorCameraSettings();
             });
         CustomInputField cameraPositionZOffsetInput = UIHelper.CreateInputField(cameraPositionOffsetGroup,
             "CameraPositionZOffsetInput", (_, newValue) =>
@@ -221,6 +223,7 @@ public partial class Plugin
                 }
 
                 CameraOffsetZ.Value = value;
+                UpdateSpectatorCameraSettings();
             });
         cameraPositionXOffsetInput.InputField.SetText(CameraOffsetX.Value.ToString(CultureInfo.InvariantCulture));
         cameraPositionYOffsetInput.InputField.SetText(CameraOffsetY.Value.ToString(CultureInfo.InvariantCulture));
@@ -250,6 +253,7 @@ public partial class Plugin
                 }
             
                 CameraXRotation.Value = value;
+                UpdateSpectatorCameraSettings();
             });
         cameraXRotationInput.InputField.SetText(CameraXRotation.Value.ToString(CultureInfo.InvariantCulture));
         #endregion
